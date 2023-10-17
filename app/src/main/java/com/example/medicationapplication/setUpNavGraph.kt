@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.presentation.screens.LoginScreen
+import com.example.presentation.screens.MedicationDetailsScreen
 import com.example.presentation.screens.MedicationsListScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -31,9 +32,12 @@ fun setUpNavGraph(
             val name = backStackEntry.arguments?.getString("name") ?: ""
             MedicationsListScreen(navController, name = name)
         }
-        composable("medication_details") {
-            //MedicationDetailsScreen(navController)
+        composable("medication_details/{arg}") { backStackEntry ->
+            val argValue = backStackEntry.arguments?.getString("arg") ?: ""
+            val (name, dose, strength) = argValue.split(",")
+            MedicationDetailsScreen(name, dose, strength)
         }
-    }
 
+
+    }
 }
