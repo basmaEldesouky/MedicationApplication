@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.example.data"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 24
@@ -55,6 +55,7 @@ dependencies {
 
     // OkHttp
     implementation ("com.squareup.okhttp3:okhttp:4.9.3")
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.11.0")
 
     // Coroutines
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
