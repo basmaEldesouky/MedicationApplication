@@ -14,7 +14,7 @@ import javax.inject.Inject
 class MedicationsListRepositoryImp @Inject constructor(
     private val localDataSource: MedicationsListLocalDataSourceContract,
     private val remoteDataSource: MedicationsListRemoteDataSourceContract,
-    private val productsListDataMapper: Mapper<MedicationsListDataModel, MedicationsListLocalEntity>,
+    private val medicationsListDataMapper: Mapper<MedicationsListDataModel, MedicationsListLocalEntity>,
 ): MedicationsListRepositoryContract {
 
     override suspend fun getMedicationsList(): Flow<Resource<List<MedicationsListDataModel>>> {
@@ -23,7 +23,7 @@ class MedicationsListRepositoryImp @Inject constructor(
                 // Get data from RemoteDataSource
                 val data = remoteDataSource.getMedications()
                 // Save to local
-                localDataSource.insertMedicationsList(productsListDataMapper.fromList(data))
+                localDataSource.insertMedicationsList(medicationsListDataMapper.fromList(data))
                 // Emit data
                 emit(Resource.Success(data))
             } catch (ex: Exception) {
@@ -32,7 +32,7 @@ class MedicationsListRepositoryImp @Inject constructor(
                     // Get data from LocalDataSource
                     val localData = localDataSource.getMedicationsListFromDataBase()
                     // Emit data
-                    emit(Resource.Success(productsListDataMapper.toList(localData)))
+                    emit(Resource.Success(medicationsListDataMapper.toList(localData)))
                 } catch (ex1: Exception) {
                     // Emit error
                     emit(Resource.Error(ex1))
