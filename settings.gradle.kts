@@ -16,3 +16,4 @@ dependencyResolutionManagement {
 rootProject.name = "MedicationApplication"
 include(":app")
 include(":common")
+include(":domain")
