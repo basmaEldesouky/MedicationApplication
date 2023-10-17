@@ -22,11 +22,13 @@ class MedicationsListRepositoryImp @Inject constructor(
             try {
                 // Get data from RemoteDataSource
                 val data = remoteDataSource.getMedications()
-                // Save to local
-                localDataSource.insertMedicationsList(medicationsListDataMapper.fromList(data))
                 // Emit data
                 emit(Resource.Success(data))
+                // Save to local
+                localDataSource.insertMedicationsList(medicationsListDataMapper.fromList(data))
+
             } catch (ex: Exception) {
+                ex.printStackTrace()
                 // If remote request fails
                 try {
                     // Get data from LocalDataSource

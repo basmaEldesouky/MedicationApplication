@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.presentation.screens.LoginScreen
+import com.example.presentation.screens.MedicationsListScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -21,17 +22,17 @@ fun setUpNavGraph(
     ){
 
         composable("login") {
-            LoginScreen()
+            LoginScreen(navController)
         }
-        composable("medications_list",
+        composable("medications_list/{name}",
             arguments = listOf(navArgument("name") { type = NavType.StringType }))
         {
                 backStackEntry ->
             val name = backStackEntry.arguments?.getString("name") ?: ""
-            //MedicationsListScreen(name = name)
+            MedicationsListScreen(navController, name = name)
         }
         composable("medication_details") {
-           // MedicationDetailsScreen()
+            //MedicationDetailsScreen(navController)
         }
     }
 

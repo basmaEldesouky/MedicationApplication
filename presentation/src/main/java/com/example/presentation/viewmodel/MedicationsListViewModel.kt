@@ -6,12 +6,16 @@ import androidx.lifecycle.viewModelScope
 import com.example.common.Resource
 import com.example.domain.entity.MedicationsListDataModel
 import com.example.domain.usecase.GetMedicationsListUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+@HiltViewModel
 class MedicationsListViewModel @Inject constructor(
     private val getMedicationsListUseCase: GetMedicationsListUseCase
 ) : ViewModel()  {
@@ -31,19 +35,25 @@ class MedicationsListViewModel @Inject constructor(
     }
 
     fun getMedicationsList(){
-        viewModelScope.launch{
-            try {
-                getMedicationsListUseCase.invoke()
-                    .onStart { emit(Resource.Loading) }
-                    .collect {
-                        when (it) {
-                            is Resource.Loading -> {}
-                            is Resource.Success -> { _medicationsListData.value = it.data }
-                            is Resource.Error -> {}
-                            else -> {}
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                try {
+                    getMedicationsListUseCase.invoke()
+                        .onStart { emit(Resource.Loading) }
+                        .collect {
+                            when (it) {
+                                is Resource.Loading -> {}
+                                is Resource.Success -> {
+                                    _medicationsListData.value = it.data
+                                }
+
+                                is Resource.Error -> {}
+                                else -> {}
+                            }
                         }
-                    }
-            } catch (e: Exception){ }
+                } catch (e: Exception) {
+                }
+            }
         }
     }
 }
